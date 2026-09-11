@@ -22,9 +22,27 @@ export type FallbackNewsletter = {
   source: "fallback";
 };
 
+export type FallbackJobApplication = {
+  id: string;
+  fullName: string;
+  email: string;
+  phone: string | null;
+  position: string;
+  experience: string | null;
+  linkedinUrl: string | null;
+  message: string | null;
+  resumeFileName: string;
+  resumeOriginalName: string;
+  resumeFileSize: number;
+  resumeMimeType: string;
+  createdAt: string;
+  source: "fallback";
+};
+
 type FallbackStore = {
   contactSubmissions: FallbackContact[];
   newsletterSubscriptions: FallbackNewsletter[];
+  jobApplications: FallbackJobApplication[];
 };
 
 async function ensureStore(): Promise<FallbackStore> {
@@ -35,9 +53,14 @@ async function ensureStore(): Promise<FallbackStore> {
     return {
       contactSubmissions: parsed.contactSubmissions || [],
       newsletterSubscriptions: parsed.newsletterSubscriptions || [],
+      jobApplications: parsed.jobApplications || [],
     };
   } catch {
-    const empty: FallbackStore = { contactSubmissions: [], newsletterSubscriptions: [] };
+    const empty: FallbackStore = {
+      contactSubmissions: [],
+      newsletterSubscriptions: [],
+      jobApplications: [],
+    };
     try {
       await fs.writeFile(FALLBACK_FILE, JSON.stringify(empty, null, 2), "utf-8");
     } catch {
@@ -93,6 +116,42 @@ export async function saveNewsletterSubscriptionFallback(email: string): Promise
   return entry;
 }
 
+export async function saveJobApplicationFallback(data: {
+  fullName: string;
+  email: string;
+  phone?: string | null;
+  position: string;
+  experience?: string | null;
+  linkedinUrl?: string | null;
+  message?: string | null;
+  resumeFileName: string;
+  resumeOriginalName: string;
+  resumeFileSize: number;
+  resumeMimeType: string;
+  createdAt?: Date;
+}): Promise<FallbackJobApplication> {
+  const store = await ensureStore();
+  const entry: FallbackJobApplication = {
+    id: `offline_job_${Date.now()}_${Math.random().toString(36).slice(2, 7)}`,
+    fullName: data.fullName,
+    email: data.email,
+    phone: data.phone || null,
+    position: data.position,
+    experience: data.experience || null,
+    linkedinUrl: data.linkedinUrl || null,
+    message: data.message || null,
+    resumeFileName: data.resumeFileName,
+    resumeOriginalName: data.resumeOriginalName,
+    resumeFileSize: data.resumeFileSize,
+    resumeMimeType: data.resumeMimeType,
+    createdAt: (data.createdAt || new Date()).toISOString(),
+    source: "fallback",
+  };
+  store.jobApplications.unshift(entry);
+  await writeStore(store);
+  return entry;
+}
+
 export async function getFallbackData(): Promise<{
   contactSubmissions: Array<{
     id: string;
@@ -110,6 +169,22 @@ export async function getFallbackData(): Promise<{
     createdAt: Date;
     source: "fallback";
   }>;
+  jobApplications: Array<{
+    id: string;
+    fullName: string;
+    email: string;
+    phone: string | null;
+    position: string;
+    experience: string | null;
+    linkedinUrl: string | null;
+    message: string | null;
+    resumeFileName: string;
+    resumeOriginalName: string;
+    resumeFileSize: number;
+    resumeMimeType: string;
+    createdAt: Date;
+    source: "fallback";
+  }>;
 }> {
   const store = await ensureStore();
   return {
@@ -123,13 +198,23 @@ export async function getFallbackData(): Promise<{
       createdAt: new Date(s.createdAt),
       source: "fallback" as const,
     })),
+    jobApplications: (store.jobApplications || []).map((s) => ({
+      ...s,
+      createdAt: new Date(s.createdAt),
+      source: "fallback" as const,
+    })),
   };
 }
 
-export async function syncFallbackToMongo(db: any): Promise<{ syncedContacts: number; syncedNewsletters: number }> {
+export async function syncFallbackToMongo(db: any): Promise<{
+  syncedContacts: number;
+  syncedNewsletters: number;
+  syncedJobApplications: number;
+}> {
   const store = await ensureStore();
   let syncedContacts = 0;
   let syncedNewsletters = 0;
+  let syncedJobApplications = 0;
 
   if (store.contactSubmissions.length > 0) {
     for (const contact of store.contactSubmissions) {
@@ -163,6 +248,27 @@ export async function syncFallbackToMongo(db: any): Promise<{ syncedContacts: nu
     store.newsletterSubscriptions = [];
   }
 
+  if (store.jobApplications && store.jobApplications.length > 0) {
+    for (const app of store.jobApplications) {
+      await db.collection("jobApplications").insertOne({
+        fullName: app.fullName,
+        email: app.email,
+        phone: app.phone,
+        position: app.position,
+        experience: app.experience,
+        linkedinUrl: app.linkedinUrl,
+        message: app.message,
+        resumeFileName: app.resumeFileName,
+        resumeOriginalName: app.resumeOriginalName,
+        resumeFileSize: app.resumeFileSize,
+        resumeMimeType: app.resumeMimeType,
+        createdAt: new Date(app.createdAt),
+      });
+      syncedJobApplications++;
+    }
+    store.jobApplications = [];
+  }
+
   await writeStore(store);
-  return { syncedContacts, syncedNewsletters };
+  return { syncedContacts, syncedNewsletters, syncedJobApplications };
 }

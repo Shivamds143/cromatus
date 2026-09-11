@@ -6,9 +6,11 @@ import type { Section, SubItem } from "@/lib/content";
 export default function SectionDetail({
   section,
   item,
+  children,
 }: {
   section: Section;
   item: SubItem;
+  children?: React.ReactNode;
 }) {
   const otherItems = section.items.filter((i) => i.slug !== item.slug);
 
@@ -40,6 +42,7 @@ export default function SectionDetail({
                 {para}
               </p>
             ))}
+            {children}
           </div>
 
           <aside>
