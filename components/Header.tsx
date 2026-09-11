@@ -31,9 +31,7 @@ export default function Header() {
       <Container className="flex h-20 items-center justify-between">
         <Link href="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
           <LogoMark className="h-11 w-auto" />
-          <span
-            className="bg-gradient-to-r from-indigo-light to-signal bg-clip-text font-display text-xl font-bold uppercase tracking-tight text-transparent"
-          >
+          <span className="font-display text-xl font-bold uppercase tracking-tight text-white">
             Chromatus
           </span>
         </Link>
@@ -60,9 +58,8 @@ export default function Header() {
                 </svg>
               </Link>
               <div
-                className={`absolute left-1/2 top-full w-72 -translate-x-1/2 pt-3 transition ${
-                  openDropdown === d.label ? "visible opacity-100" : "invisible opacity-0"
-                }`}
+                className={`absolute left-1/2 top-full w-72 -translate-x-1/2 pt-3 transition ${openDropdown === d.label ? "visible opacity-100" : "invisible opacity-0"
+                  }`}
               >
                 <div className="rounded-xl border border-line bg-white p-2 shadow-2xl shadow-ink/20">
                   {d.section.items.map((item) => (
