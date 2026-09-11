@@ -24,7 +24,12 @@ export async function POST(request: Request) {
     const phone = (formData.get("phone") as string | null)?.trim() || null;
     const position = (formData.get("position") as string | null)?.trim() || "General Application";
     const experience = (formData.get("experience") as string | null)?.trim() || null;
-    const linkedinUrl = (formData.get("linkedinUrl") as string | null)?.trim() || null;
+    const rawLinkedinUrl = (formData.get("linkedinUrl") as string | null)?.trim() || null;
+    const linkedinUrl = rawLinkedinUrl
+      ? /^https?:\/\//i.test(rawLinkedinUrl)
+        ? rawLinkedinUrl
+        : `https://${rawLinkedinUrl}`
+      : null;
     const message = (formData.get("message") as string | null)?.trim() || null;
 
     if (!fullName) {

@@ -24,6 +24,15 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
+function formatExternalUrl(url?: string | null): string {
+  if (!url) return "#";
+  const trimmed = url.trim();
+  if (/^https?:\/\//i.test(trimmed)) {
+    return trimmed;
+  }
+  return `https://${trimmed}`;
+}
+
 export default async function AdminPage() {
   const data = await getAdminDashboardData();
   const applications = data.jobApplications;
@@ -165,7 +174,7 @@ export default async function AdminPage() {
                         <p className="font-semibold text-ink">{app.fullName}</p>
                         {app.linkedinUrl && (
                           <a
-                            href={app.linkedinUrl}
+                            href={formatExternalUrl(app.linkedinUrl)}
                             target="_blank"
                             rel="noopener noreferrer"
                             className="mt-1 inline-flex items-center gap-1 text-xs text-indigo hover:underline"

@@ -112,7 +112,12 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
     const fullName = (formValues.get("fullName") as string)?.trim() || "";
     const email = (formValues.get("email") as string)?.trim() || "";
     const phone = (formValues.get("phone") as string)?.trim() || "";
-    const linkedinUrl = (formValues.get("linkedinUrl") as string)?.trim() || "";
+    const rawLinkedin = (formValues.get("linkedinUrl") as string)?.trim() || "";
+    const linkedinUrl = rawLinkedin
+      ? /^https?:\/\//i.test(rawLinkedin)
+        ? rawLinkedin
+        : `https://${rawLinkedin}`
+      : "";
     const message = (formValues.get("message") as string)?.trim() || "";
     const honeypot = (formValues.get("company_website") as string) || "";
 
