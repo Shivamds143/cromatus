@@ -64,10 +64,10 @@ export default function Hero() {
 
         <div className="mt-20 grid grid-cols-2 gap-8 border-t border-paper/10 pt-8 sm:grid-cols-4">
           {[
-            ["10+", "Years in market research & consulting"],
+            ["25+", "Years of research experience"],
+            ["20+", "Years of B2B consulting"],
             ["8", "Industry verticals tracked"],
             ["350+", "Researched topics in our knowledge base"],
-            ["80+", "Researchers & field investigators"],
           ].map(([stat, label]) => (
             <div key={label}>
               <StatCounter value={stat} className="font-display text-3xl font-semibold text-signal" />
