@@ -20,16 +20,16 @@ export default function AdminLoginPage() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ username, password })
       });
-      const data = await res.json();
-      if (!res.ok) {
-        setError(data.error || 'Login failed.');
+      const data = await res.json().catch(() => null);
+      if (!res.ok || !data?.ok) {
+        setError(data?.error || 'Invalid username or password.');
         setLoading(false);
         return;
       }
       router.push('/admin');
       router.refresh();
-    } catch {
-      setError('Something went wrong. Please try again.');
+    } catch (err) {
+      setError('Network error. Please check your connection and try again.');
       setLoading(false);
     }
   }

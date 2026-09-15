@@ -25,40 +25,48 @@ function isRateLimited(ip) {
 }
 
 export async function POST(request) {
-  const ip = request.headers.get('x-forwarded-for') || 'local';
-  if (isRateLimited(ip)) {
-    return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
-  }
-
-  let body;
   try {
-    body = await request.json();
-  } catch {
-    return NextResponse.json({ error: 'Invalid request.' }, { status: 400 });
+    const ip = request.headers.get('x-forwarded-for') || 'local';
+    if (isRateLimited(ip)) {
+      return NextResponse.json({ error: 'Too many attempts. Try again later.' }, { status: 429 });
+    }
+
+    let body;
+    try {
+      body = await request.json();
+    } catch {
+      return NextResponse.json({ error: 'Invalid request payload.' }, { status: 400 });
+    }
+
+    const username = (body?.username || '').trim();
+    const password = body?.password || '';
+
+    if (!username || !password) {
+      return NextResponse.json({ error: 'Username and password are required.' }, { status: 400 });
+    }
+
+    const admin = await findAdminByUsername(username);
+    if (!admin || !verifyPassword(password, admin.password_hash)) {
+      return NextResponse.json({ error: 'Invalid username or password.' }, { status: 401 });
+    }
+
+    const token = createSessionToken(admin.username);
+    await touchLastLogin(admin.username);
+
+    const response = NextResponse.json({ ok: true, username: admin.username });
+    response.cookies.set(SESSION_COOKIE_NAME, token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'lax',
+      path: '/',
+      maxAge: 60 * 60 * 12 // 12 hours
+    });
+    return response;
+  } catch (err) {
+    console.error('Error during admin login:', err);
+    return NextResponse.json(
+      { error: err?.message || 'Authentication failed. Please try again.' },
+      { status: 500 }
+    );
   }
-
-  const username = (body?.username || '').trim();
-  const password = body?.password || '';
-
-  if (!username || !password) {
-    return NextResponse.json({ error: 'Username and password are required.' }, { status: 400 });
-  }
-
-  const admin = await findAdminByUsername(username);
-  if (!admin || !verifyPassword(password, admin.password_hash)) {
-    return NextResponse.json({ error: 'Invalid username or password.' }, { status: 401 });
-  }
-
-  const token = createSessionToken(admin.username);
-  await touchLastLogin(admin.username);
-
-  const response = NextResponse.json({ ok: true, username: admin.username });
-  response.cookies.set(SESSION_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: process.env.NODE_ENV === 'production',
-    sameSite: 'lax',
-    path: '/',
-    maxAge: 60 * 60 * 12 // 12 hours
-  });
-  return response;
 }

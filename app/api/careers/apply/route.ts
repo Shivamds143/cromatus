@@ -66,13 +66,22 @@ export async function POST(request: Request) {
     const uniqueSuffix = `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
     const storedFileName = `${safeName}_${uniqueSuffix}${ext}`;
 
-    // Read file buffer and save to data/resumes
+    // Read file buffer
     const fileBytes = await resumeFile.arrayBuffer();
     const buffer = Buffer.from(fileBytes);
+    const resumeBase64 = buffer.toString("base64");
 
-    await fs.mkdir(RESUMES_DIR, { recursive: true });
-    const destinationPath = path.join(RESUMES_DIR, storedFileName);
-    await fs.writeFile(destinationPath, buffer);
+    // Optional local disk cache: works on local dev; gracefully catches in serverless read-only environments (e.g. Vercel)
+    const resumesDir = process.env.VERCEL
+      ? path.join("/tmp", "resumes")
+      : path.join(process.cwd(), "data", "resumes");
+    try {
+      await fs.mkdir(resumesDir, { recursive: true });
+      const destinationPath = path.join(resumesDir, storedFileName);
+      await fs.writeFile(destinationPath, buffer);
+    } catch (fsErr) {
+      console.warn("Local disk write skipped in serverless environment:", fsErr);
+    }
 
     const record = {
       fullName,
@@ -86,6 +95,7 @@ export async function POST(request: Request) {
       resumeOriginalName: originalName,
       resumeFileSize: resumeFile.size,
       resumeMimeType: resumeFile.type || (ext === ".pdf" ? "application/pdf" : "application/msword"),
+      resumeBase64,
       createdAt: new Date(),
     };
 

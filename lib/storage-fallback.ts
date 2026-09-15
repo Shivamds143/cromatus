@@ -71,8 +71,18 @@ async function ensureStore(): Promise<FallbackStore> {
 }
 
 async function writeStore(store: FallbackStore): Promise<void> {
-  await fs.mkdir(DATA_DIR, { recursive: true });
-  await fs.writeFile(FALLBACK_FILE, JSON.stringify(store, null, 2), "utf-8");
+  try {
+    await fs.mkdir(DATA_DIR, { recursive: true });
+    await fs.writeFile(FALLBACK_FILE, JSON.stringify(store, null, 2), "utf-8");
+  } catch {
+    try {
+      const tmpDir = path.join("/tmp", "chromatus_data");
+      await fs.mkdir(tmpDir, { recursive: true });
+      await fs.writeFile(path.join(tmpDir, "fallback_submissions.json"), JSON.stringify(store, null, 2), "utf-8");
+    } catch {
+      // ignore in read-only environments
+    }
+  }
 }
 
 export async function saveContactSubmissionFallback(data: {

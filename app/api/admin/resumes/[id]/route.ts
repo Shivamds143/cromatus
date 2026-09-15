@@ -70,6 +70,23 @@ export async function GET(request: NextRequest, { params }: RouteProps) {
         resumeFileName = foundRecord.resumeFileName;
         resumeOriginalName = foundRecord.resumeOriginalName || resumeFileName;
         resumeMimeType = foundRecord.resumeMimeType || "application/pdf";
+
+        // If stored in MongoDB as base64 (serverless/Vercel support)
+        if (foundRecord.resumeBase64) {
+          const fileBuffer = Buffer.from(foundRecord.resumeBase64, "base64");
+          const sanitizedOriginalName = encodeURIComponent(resumeOriginalName.replace(/[\r\n]/g, ""));
+          const dispositionType = downloadOnly || !resumeMimeType.includes("pdf") ? "attachment" : "inline";
+
+          return new NextResponse(fileBuffer, {
+            status: 200,
+            headers: {
+              "Content-Type": resumeMimeType,
+              "Content-Disposition": `${dispositionType}; filename="${sanitizedOriginalName}"; filename*=UTF-8''${sanitizedOriginalName}`,
+              "Content-Length": fileBuffer.length.toString(),
+              "Cache-Control": "private, max-age=3600",
+            },
+          });
+        }
       } else {
         // Fallback: try using the ID itself as filename
         resumeFileName = path.basename(id);
@@ -78,15 +95,20 @@ export async function GET(request: NextRequest, { params }: RouteProps) {
 
     // Secure the file path to prevent directory traversal attacks
     const safeFileName = path.basename(resumeFileName);
-    const filePath = path.join(RESUMES_DIR, safeFileName);
-
+    let fileBuffer: Buffer | null = null;
     try {
-      await fs.access(filePath);
+      fileBuffer = await fs.readFile(path.join(RESUMES_DIR, safeFileName));
     } catch {
-      return new NextResponse("Resume file not found on server.", { status: 404 });
+      try {
+        fileBuffer = await fs.readFile(path.join("/tmp", "resumes", safeFileName));
+      } catch {
+        fileBuffer = null;
+      }
     }
 
-    const fileBuffer = await fs.readFile(filePath);
+    if (!fileBuffer) {
+      return new NextResponse("Resume file not found on server.", { status: 404 });
+    }
 
     // Escape or encode original file name for Content-Disposition header
     const sanitizedOriginalName = encodeURIComponent(resumeOriginalName.replace(/[\r\n]/g, ""));
