@@ -2,25 +2,37 @@ import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
 import ContactForm from "@/components/ContactForm";
+import { getPageContent } from "@/lib/cms";
+import { contact as fallbackContact } from "@/data/content/misc";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Contact Us — Chromatus Consulting",
   description: "Get in touch, locations, and contact details for Chromatus Consulting.",
 };
 
-const generalInquiries = [
+const defaultInquiries = [
   { label: "New business & project scoping", value: "info@chromatus.com" },
   { label: "Press & media", value: "info@chromatus.com" },
   { label: "Careers", value: "info@chromatus.com" },
 ];
 
-export default function ContactPage() {
+export default async function ContactPage() {
+  const content = await getPageContent("contact", fallbackContact);
+  const details = content?.details || {};
+  const email = details.email || "info@chromatus.com";
+  const phone = details.phone || "+91 74984 65144";
+  const address = details.address || "Sai Shilp, Near Universal, Warje, Pune 411052";
+  const hours = details.hours || "Monday – Friday, 9AM – 8PM IST";
+
   return (
     <>
       <PageHero
-        eyebrow="Contact Us"
-        title="Get in touch, locations, and contact details."
-        body="Fill in a few details below and a member of our team will follow up within one business day — or reach us directly."
+        eyebrow={content?.eyebrow || "Contact Us"}
+        title={content?.title || "Get in touch, locations, and contact details."}
+        body={content?.lead || "Fill in a few details below and a member of our team will follow up within one business day — or reach us directly."}
       />
 
       <section id="contact-form" className="scroll-mt-28 py-24">
@@ -48,14 +60,14 @@ export default function ContactPage() {
           <div className="mt-10 max-w-md rounded-2xl border border-line bg-white p-8">
             <p className="font-display text-lg font-semibold text-ink">Pune — Headquarters</p>
             <p className="mt-2 text-sm leading-relaxed text-slate">
-              Sai Shilp, Near Universal, Warje, Pune 411052
+              {address}
             </p>
             <p className="mt-4 text-sm">
-              <a href="tel:+917498465144" className="font-medium text-ink hover:text-indigo">
-                +91 74984 65144
+              <a href={`tel:${phone.replace(/\s+/g, "")}`} className="font-medium text-ink hover:text-indigo">
+                {phone}
               </a>
             </p>
-            <p className="mt-1 font-mono text-xs text-slate">Monday – Friday, 9AM – 8PM IST</p>
+            <p className="mt-1 font-mono text-xs text-slate">{hours}</p>
           </div>
         </Container>
       </section>
@@ -67,11 +79,11 @@ export default function ContactPage() {
             Not sure who to ask? Start here.
           </h2>
           <ul className="mt-10 divide-y divide-line border-t border-line sm:max-w-lg">
-            {generalInquiries.map((g) => (
+            {defaultInquiries.map((g) => (
               <li key={g.label} className="flex items-center justify-between gap-4 py-4">
                 <span className="text-sm text-ink/75">{g.label}</span>
-                <a href={`mailto:${g.value}`} className="text-sm font-medium text-indigo hover:text-indigo-light">
-                  {g.value}
+                <a href={`mailto:${email}`} className="text-sm font-medium text-indigo hover:text-indigo-light">
+                  {email}
                 </a>
               </li>
             ))}

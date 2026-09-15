@@ -24,25 +24,39 @@ const steps = [
   },
 ];
 
-export default function Process() {
+type ProcessProps = {
+  content?: {
+    eyebrow?: string;
+    title?: string;
+    text?: string;
+    attribution?: string;
+    steps?: Array<{ stage?: string; title: string; body: string }>;
+  };
+};
+
+export default function Process({ content }: ProcessProps) {
+  const eyebrow = content?.attribution || content?.eyebrow || "03 / Our approach";
+  const title = content?.text || content?.title || "Evidence first. Insight driven. Action focused.";
+  const displaySteps = content?.steps && content.steps.length > 0 ? content.steps : steps;
+
   return (
     <section className="bg-paper py-24">
       <Container>
-        <p className="eyebrow"><span className="text-signal-dark">03 /</span> Our approach</p>
+        <p className="eyebrow"><span className="text-signal-dark">{eyebrow.includes("/") ? eyebrow.split("/")[0] + "/" : "03 /"}</span> {eyebrow.includes("/") ? eyebrow.split("/")[1] : eyebrow}</p>
         <h2 className="mt-3 max-w-lg font-display text-3xl font-semibold tracking-tight sm:text-[2.6rem]">
-          Evidence first. Insight driven. Action focused.
+          {title}
         </h2>
 
         <div className="mt-14 grid gap-0 sm:grid-cols-2 lg:grid-cols-4">
-          {steps.map((s, i) => (
-            <Reveal key={s.stage} delay={i * 100}>
+          {displaySteps.map((s, i) => (
+            <Reveal key={s.stage || i} delay={i * 100}>
               <div
                 className={`relative py-8 pr-8 lg:py-0 lg:pt-0 ${
                   i > 0 && i % 2 !== 0 ? "sm:border-l sm:border-line sm:pl-8" : ""
                 } ${i > 0 ? "lg:border-l lg:border-line lg:pl-8" : ""}`}
               >
                 <span className="font-display text-4xl font-semibold text-signal/30">
-                  {s.stage}
+                  {s.stage || String(i + 1).padStart(2, "0")}
                 </span>
                 <h3 className="mt-4 font-display text-lg font-semibold text-ink">{s.title}</h3>
                 <p className="mt-2.5 text-sm leading-relaxed text-slate">{s.body}</p>

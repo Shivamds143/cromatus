@@ -1,9 +1,14 @@
 import type { Config } from "tailwindcss";
 
+function withOpacity(cssVar: string): any {
+  return ({ opacityValue }: { opacityValue?: string }) =>
+    opacityValue !== undefined ? `rgb(var(${cssVar}) / ${opacityValue})` : `rgb(var(${cssVar}))`;
+}
+
 const config: Config = {
   content: [
-    "./app/**/*.{ts,tsx}",
-    "./components/**/*.{ts,tsx}",
+    "./app/**/*.{js,jsx,ts,tsx}",
+    "./components/**/*.{js,jsx,ts,tsx}",
   ],
   theme: {
     extend: {
@@ -36,6 +41,27 @@ const config: Config = {
           rose: "#C97614",
           green: "#3D9FDE",
         },
+        navy: {
+          DEFAULT: withOpacity("--color-navy-rgb"),
+          light: withOpacity("--color-navy-light-rgb"),
+          dark: withOpacity("--color-navy-dark-rgb"),
+        },
+        brandblue: {
+          DEFAULT: withOpacity("--color-brandblue-rgb"),
+          dark: withOpacity("--color-brandblue-dark-rgb"),
+        },
+        brandorange: {
+          DEFAULT: withOpacity("--color-brandorange-rgb"),
+          dark: withOpacity("--color-brandorange-dark-rgb"),
+        },
+        bglight: "#F4F8FC",
+        inkgray: "#5B6B82",
+      },
+      borderRadius: {
+        xl2: "1.25rem",
+      },
+      boxShadow: {
+        card: "0 4px 24px rgba(10, 31, 61, 0.08)",
       },
       fontFamily: {
         display: ["var(--font-display)", "sans-serif"],

@@ -6,6 +6,13 @@
   --font-display: "Space Grotesk", sans-serif;
   --font-body: "Inter", sans-serif;
   --font-mono: "IBM Plex Mono", monospace;
+  --color-navy-rgb: 14 74 107;
+  --color-navy-light-rgb: 21 97 155;
+  --color-navy-dark-rgb: 10 51 80;
+  --color-brandblue-rgb: 31 130 197;
+  --color-brandblue-dark-rgb: 21 97 155;
+  --color-brandorange-rgb: 234 122 0;
+  --color-brandorange-dark-rgb: 196 102 0;
 }
 
 * {

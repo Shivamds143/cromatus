@@ -12,6 +12,23 @@ export function generateSessionToken(username: string): string {
 
 export function isValidToken(token?: string | null): boolean {
   if (!token) return false;
+
+  // Support signed session token format: <base64url-payload>.<signature>
+  if (token.includes(".")) {
+    const parts = token.split(".");
+    if (parts.length === 2 && parts[0] && parts[1]) {
+      try {
+        const payloadStr = Buffer.from(parts[0], "base64url").toString("utf8");
+        const payload = JSON.parse(payloadStr);
+        if (payload?.exp && payload.exp > Date.now()) {
+          return true;
+        }
+      } catch {
+        // Continue to check legacy format
+      }
+    }
+  }
+
   // Also support legacy token for backward compatibility
   if (token.length > 20 && !token.startsWith("chr_")) {
     return true;

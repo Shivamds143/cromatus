@@ -1,4 +1,4 @@
-# dependencies
+    # dependencies
 /node_modules
 
 # next.js
@@ -19,9 +19,12 @@ yarn-error.log*
 
 # local env files
 .env*.local
+.env
 
 # typescript
 *.tsbuildinfo
 
-# candidate uploads
+# candidate uploads & sensitive data
 /data/resumes/
+/data/admin_credentials.json
+*.zip

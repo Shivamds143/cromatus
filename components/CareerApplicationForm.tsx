@@ -1,13 +1,15 @@
 "use client";
 
-import { ChangeEvent, DragEvent, FormEvent, useState, useRef } from "react";
+import { ChangeEvent, DragEvent, FormEvent, useState, useRef, useEffect } from "react";
 
 type Props = {
   initialPosition?: string;
   className?: string;
+  onResetPosition?: () => void;
 };
 
-const positionOptions = [
+const defaultPositionOptions = [
+  "Business Developer",
   "Market Research Analyst",
   "Senior Data Analyst",
   "Data Scientist",
@@ -36,8 +38,29 @@ function formatFileSize(bytes: number): string {
   return `${(bytes / (1024 * 1024)).toFixed(2)} MB`;
 }
 
-export default function CareerApplicationForm({ initialPosition, className = "" }: Props) {
-  const [selectedPosition, setSelectedPosition] = useState(initialPosition || positionOptions[0]);
+export default function CareerApplicationForm({
+  initialPosition,
+  className = "",
+  onResetPosition,
+}: Props) {
+  const [selectedPosition, setSelectedPosition] = useState(
+    initialPosition || defaultPositionOptions[0]
+  );
+
+  useEffect(() => {
+    if (initialPosition) {
+      setSelectedPosition(initialPosition);
+    }
+  }, [initialPosition]);
+
+  // Ensure initialPosition is always an option in the dropdown
+  const positionOptions = Array.from(
+    new Set(
+      initialPosition && !defaultPositionOptions.includes(initialPosition)
+        ? [initialPosition, ...defaultPositionOptions]
+        : defaultPositionOptions
+    )
+  );
   const [experience, setExperience] = useState(experienceLevels[0]);
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [fileError, setFileError] = useState<string>("");
@@ -112,12 +135,6 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
     const fullName = (formValues.get("fullName") as string)?.trim() || "";
     const email = (formValues.get("email") as string)?.trim() || "";
     const phone = (formValues.get("phone") as string)?.trim() || "";
-    const rawLinkedin = (formValues.get("linkedinUrl") as string)?.trim() || "";
-    const linkedinUrl = rawLinkedin
-      ? /^https?:\/\//i.test(rawLinkedin)
-        ? rawLinkedin
-        : `https://${rawLinkedin}`
-      : "";
     const message = (formValues.get("message") as string)?.trim() || "";
     const honeypot = (formValues.get("company_website") as string) || "";
 
@@ -147,7 +164,6 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
       uploadData.append("phone", phone);
       uploadData.append("position", selectedPosition);
       uploadData.append("experience", experience);
-      uploadData.append("linkedinUrl", linkedinUrl);
       uploadData.append("message", message);
       uploadData.append("company_website", honeypot);
       if (selectedFile) {
@@ -213,9 +229,29 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
   return (
     <div id="apply-form" className={`rounded-2xl border border-line bg-white p-6 sm:p-10 shadow-sm ${className}`}>
       <div className="border-b border-line pb-6">
-        <p className="mono-tag text-indigo">Join Our Team</p>
+        <div className="flex flex-wrap items-center justify-between gap-3">
+          <p className="mono-tag text-indigo">Join Our Team</p>
+          {selectedPosition && selectedPosition !== "General / Open Application" && (
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200/80">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+              Applying for: {selectedPosition}
+              {onResetPosition && (
+                <button
+                  type="button"
+                  onClick={onResetPosition}
+                  className="ml-1 text-slate hover:text-ink font-normal underline"
+                  title="Switch to general application"
+                >
+                  (change)
+                </button>
+              )}
+            </span>
+          )}
+        </div>
         <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
-          Upload Your Resume / CV
+          {selectedPosition && selectedPosition !== "General / Open Application"
+            ? `Apply for ${selectedPosition}`
+            : "Upload Your Resume / CV"}
         </h2>
         <p className="mt-2 text-sm text-slate">
           Submit your profile for current openings or general consideration. We review all applications directly.
@@ -285,24 +321,6 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
             />
           </label>
 
-          {/* Role / Position */}
-          <label className="block">
-            <span className="mono-tag text-slate">Role of Interest</span>
-            <select
-              value={selectedPosition}
-              onChange={(e) => setSelectedPosition(e.target.value)}
-              className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
-            >
-              {positionOptions.map((opt) => (
-                <option key={opt} value={opt}>
-                  {opt}
-                </option>
-              ))}
-            </select>
-          </label>
-        </div>
-
-        <div className="grid gap-5 sm:grid-cols-2">
           {/* Experience Level */}
           <label className="block">
             <span className="mono-tag text-slate">Years of Experience</span>
@@ -318,18 +336,23 @@ export default function CareerApplicationForm({ initialPosition, className = "" 
               ))}
             </select>
           </label>
+        </div>
 
-          {/* LinkedIn or Portfolio Link */}
+        <div>
+          {/* Role / Position */}
           <label className="block">
-            <span className="mono-tag text-slate">
-              LinkedIn / Portfolio <span className="text-slate/60">(optional)</span>
-            </span>
-            <input
-              name="linkedinUrl"
-              type="url"
-              placeholder="https://linkedin.com/in/username"
+            <span className="mono-tag text-slate">Role of Interest</span>
+            <select
+              value={selectedPosition}
+              onChange={(e) => setSelectedPosition(e.target.value)}
               className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
-            />
+            >
+              {positionOptions.map((opt) => (
+                <option key={opt} value={opt}>
+                  {opt}
+                </option>
+              ))}
+            </select>
           </label>
         </div>
 

@@ -5,17 +5,26 @@ import Process from "@/components/Process";
 import WhyChoose from "@/components/WhyChoose";
 import Testimonials from "@/components/Testimonials";
 import CTABanner from "@/components/CTABanner";
+import { getPageContent } from "@/lib/cms";
+import { home } from "@/data/content/home";
+import { listPublishedTestimonials } from "@/lib/testimonials";
 
-export default function Home() {
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
+
+export default async function Home() {
+  const content = await getPageContent("home", home);
+  const testimonials = await listPublishedTestimonials();
+
   return (
     <>
-      <Hero />
+      <Hero content={content?.hero} />
       <TrustStrip />
       <ExploreGrid />
-      <Process />
-      <WhyChoose />
-      <Testimonials />
-      <CTABanner />
+      <Process content={content?.quote} />
+      <WhyChoose content={content?.about} />
+      <Testimonials items={testimonials as any} />
+      <CTABanner content={content?.chromatusPro} />
     </>
   );
 }

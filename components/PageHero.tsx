@@ -4,10 +4,12 @@ export default function PageHero({
   eyebrow,
   title,
   body,
+  children,
 }: {
   eyebrow: string;
   title: string;
   body: string;
+  children?: React.ReactNode;
 }) {
   return (
     <section className="border-b border-line bg-paper-dim py-20">
@@ -17,6 +19,7 @@ export default function PageHero({
           {title}
         </h1>
         <p className="mt-5 max-w-xl text-[1.05rem] leading-relaxed text-slate">{body}</p>
+        {children}
       </Container>
     </section>
   );

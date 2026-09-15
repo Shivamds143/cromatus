@@ -5,13 +5,12 @@ import { useState } from "react";
 import Container from "./Container";
 import LogoMark from "./LogoMark";
 import SearchToggle from "./SearchToggle";
-import { servicesSection, industriesSection, insightsSection, careersSection } from "@/lib/content";
+import { servicesSection, industriesSection, insightsSection } from "@/lib/content";
 
 const dropdowns = [
   { label: "Services", section: servicesSection },
   { label: "Industries", section: industriesSection },
   { label: "Insights", section: insightsSection },
-  { label: "Careers", section: careersSection },
 ];
 
 const plainLinks = [
@@ -75,6 +74,10 @@ export default function Header() {
               </div>
             </div>
           ))}
+
+          <Link href="/careers" className={navLinkClass}>
+            Careers
+          </Link>
 
           <Link href="/contact" className={navLinkClass}>
             Contact Us
@@ -151,6 +154,14 @@ export default function Header() {
                 )}
               </div>
             ))}
+
+            <Link
+              href="/careers"
+              className="rounded-lg px-2 py-2.5 text-sm font-medium text-paper"
+              onClick={() => setOpen(false)}
+            >
+              Careers
+            </Link>
 
             <Link
               href="/contact"

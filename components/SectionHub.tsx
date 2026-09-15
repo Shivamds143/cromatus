@@ -9,10 +9,24 @@ import type { Section } from "@/lib/content";
 
 const barColors = ["#1F82C5", "#EA9322", "#15619B", "#F2AC52", "#3D9FDE", "#C97614"];
 
-export default function SectionHub({ section }: { section: Section }) {
+export default function SectionHub({
+  section,
+  overrideTitle,
+  overrideIntro,
+  overrideEyebrow,
+}: {
+  section: Section;
+  overrideTitle?: string;
+  overrideIntro?: string;
+  overrideEyebrow?: string;
+}) {
   return (
     <>
-      <PageHero eyebrow={section.eyebrow} title={section.title} body={section.intro} />
+      <PageHero
+        eyebrow={overrideEyebrow || section.eyebrow}
+        title={overrideTitle || section.title}
+        body={overrideIntro || section.intro}
+      />
 
       <section className="py-24">
         <Container>

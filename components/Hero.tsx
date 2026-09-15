@@ -8,7 +8,29 @@ const avatars = [
   { initials: "SK", bg: "#EA9322" },
 ];
 
-export default function Hero() {
+type HeroProps = {
+  content?: {
+    eyebrow?: string;
+    title?: string;
+    highlight?: string;
+    subtitle?: string;
+    primaryCta?: { label: string; href: string };
+    secondaryCta?: { label: string; href: string };
+    caption?: { title?: string; tagline?: string };
+    stats?: Array<[string, string]>;
+  };
+};
+
+export default function Hero({ content }: HeroProps) {
+  const title = content?.title || "We turn data into decisions you can act on.";
+  const highlight = content?.highlight;
+  const subtitle =
+    content?.subtitle ||
+    "Chromatus Consulting helps businesses understand their markets, their customers, and their competition — so every decision is backed by evidence, not guesswork.";
+  const ctaLabel = content?.primaryCta?.label || "Chromatus Pro";
+  const ctaHref = content?.primaryCta?.href || "/contact#contact-form";
+  const tagline = content?.caption?.tagline || "Trusted by teams who are ready to move forward.";
+
   return (
     <section className="relative overflow-hidden bg-gradient-to-br from-ink via-ink-soft to-indigo-dark text-paper">
       {/* Decorative hexagon echo of the logo mark */}
@@ -39,23 +61,27 @@ export default function Hero() {
 
       <Container className="relative pb-16 pt-20 lg:pt-28">
         <h1 className="mt-6 max-w-3xl animate-fade-up font-display text-[2.6rem] font-semibold leading-[1.08] tracking-tight sm:text-6xl">
-          We turn data
-          <br />
-          into <span className="text-signal">decisions you can act on.</span>
+          {highlight && title.includes(highlight) ? (
+            <>
+              {title.split(highlight)[0]}
+              <span className="text-signal">{highlight}</span>
+              {title.split(highlight)[1]}
+            </>
+          ) : (
+            title
+          )}
         </h1>
 
         <p className="mt-7 max-w-xl animate-fade-up text-[1.05rem] leading-relaxed text-paper/60 [animation-delay:160ms]">
-          Chromatus Consulting helps businesses understand their markets,
-          their customers, and their competition — so every decision is
-          backed by evidence, not guesswork.
+          {subtitle}
         </p>
 
         <div className="mt-10 flex animate-fade-up flex-wrap items-center gap-5 [animation-delay:240ms]">
           <Link
-            href="/contact#contact-form"
+            href={ctaHref}
             className="group flex items-center gap-2 rounded-lg bg-paper px-7 py-3.5 text-sm font-semibold text-ink transition hover:bg-signal hover:text-ink"
           >
-            Chromatus Pro
+            {ctaLabel}
             <svg width="14" height="14" viewBox="0 0 16 16" fill="none" className="transition group-hover:translate-x-0.5">
               <path d="M4 12L12 4M12 4H5M12 4V11" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
             </svg>

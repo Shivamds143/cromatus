@@ -1,26 +1,43 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
+import { getPageContent } from "@/lib/cms";
+import { legal } from "@/data/content/misc";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = { title: "Privacy Policy — Chromatus Consulting" };
 
-export default function PrivacyPolicyPage() {
+export default async function PrivacyPolicyPage() {
+  const content = await getPageContent("legal_privacy", legal.privacy);
+  const title = content?.title || "Privacy Policy";
+  const updated = content?.updated || "Last updated: September 2026";
+  const customBody = content?.body && Array.isArray(content.body) ? content.body : null;
+
   return (
     <>
       <PageHero
         eyebrow="Legal"
-        title="Privacy Policy"
+        title={title}
         body="How Chromatus Consulting collects, uses, and protects information shared with us."
       />
       <section className="py-24">
         <Container className="max-w-2xl space-y-10 text-sm leading-relaxed text-slate">
           <p className="rounded-lg border border-line bg-paper-dim px-5 py-4 text-xs text-slate">
-            Draft policy — for review by qualified counsel before publishing.
-            Last updated: September 2026.
+            {updated}
           </p>
 
-          <div className="space-y-3">
-            <h2 className="font-display text-lg font-semibold text-ink">1. Introduction</h2>
+          {customBody && customBody.length > 0 ? (
+            <div className="space-y-6">
+              {customBody.map((paragraph: string, idx: number) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <h2 className="font-display text-lg font-semibold text-ink">1. Introduction</h2>
             <p>
               Chromatus Consulting (&ldquo;Chromatus,&rdquo; &ldquo;we,&rdquo;
               &ldquo;us,&rdquo; or &ldquo;our&rdquo;) respects your privacy
@@ -112,6 +129,8 @@ export default function PrivacyPolicyPage() {
               or write to us at Sai Shilp, Near Universal, Warje, Pune 411052.
             </p>
           </div>
+          </>
+          )}
         </Container>
       </section>
     </>

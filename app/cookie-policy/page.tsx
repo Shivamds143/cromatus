@@ -1,26 +1,43 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
+import { getPageContent } from "@/lib/cms";
+import { legal } from "@/data/content/misc";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = { title: "Cookie Policy — Chromatus Consulting" };
 
-export default function CookiePolicyPage() {
+export default async function CookiePolicyPage() {
+  const content = await getPageContent("legal_cookies", legal.cookies);
+  const title = content?.title || "Cookie Policy";
+  const updated = content?.updated || "Last updated: September 2026";
+  const customBody = content?.body && Array.isArray(content.body) ? content.body : null;
+
   return (
     <>
       <PageHero
         eyebrow="Legal"
-        title="Cookie Policy"
+        title={title}
         body="How Chromatus Consulting uses cookies and similar technologies on this site."
       />
       <section className="py-24">
         <Container className="max-w-2xl space-y-10 text-sm leading-relaxed text-slate">
           <p className="rounded-lg border border-line bg-paper-dim px-5 py-4 text-xs text-slate">
-            Draft policy — confirm against the actual cookies/analytics this
-            site uses before publishing. Last updated: September 2026.
+            {updated}
           </p>
 
-          <div className="space-y-3">
-            <h2 className="font-display text-lg font-semibold text-ink">1. What Are Cookies</h2>
+          {customBody && customBody.length > 0 ? (
+            <div className="space-y-6">
+              {customBody.map((paragraph: string, idx: number) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <h2 className="font-display text-lg font-semibold text-ink">1. What Are Cookies</h2>
             <p>
               Cookies are small text files placed on your device when you
               visit a website. They help the site function properly and
@@ -64,6 +81,8 @@ export default function CookiePolicyPage() {
               </a>.
             </p>
           </div>
+          </>
+          )}
         </Container>
       </section>
     </>

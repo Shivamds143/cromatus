@@ -48,7 +48,44 @@ function Stars() {
   );
 }
 
-export default function Testimonials() {
+type TestimonialItem = {
+  quote: string;
+  author_name?: string;
+  author_role?: string;
+  company?: string;
+  avatar_url?: string;
+  role?: string;
+  org?: string;
+  initials?: string;
+  color?: string;
+};
+
+const avatarColors = ["#1F82C5", "#EA9322", "#3D9FDE", "#C97614", "#15619B", "#F2AC52"];
+
+export default function Testimonials({ items }: { items?: TestimonialItem[] }) {
+  const displayQuotes = (items && items.length > 0)
+    ? items.map((item, idx) => {
+        const name = item.author_name || "";
+        const computedInitials = name
+          ? name
+              .split(" ")
+              .filter(Boolean)
+              .map((part) => part[0])
+              .join("")
+              .slice(0, 2)
+              .toUpperCase()
+          : item.initials || "CC";
+
+        return {
+          quote: item.quote,
+          role: item.author_role || item.role || "Client",
+          org: item.company || item.org || "Verified Client",
+          initials: computedInitials,
+          color: item.color || avatarColors[idx % avatarColors.length],
+        };
+      })
+    : quotes;
+
   return (
     <section className="relative overflow-hidden bg-ink py-24 text-paper">
       <svg
@@ -75,7 +112,7 @@ export default function Testimonials() {
         </h2>
 
         <div className="mt-14 grid gap-6 sm:grid-cols-2">
-          {quotes.map((q, i) => (
+          {displayQuotes.map((q, i) => (
             <Reveal key={i} delay={i * 90}>
               <figure className="flex h-full flex-col rounded-2xl border border-paper/10 bg-paper/[0.03] p-8 transition duration-300 hover:-translate-y-1 hover:border-signal/30 hover:bg-paper/[0.06]">
                 <div className="flex items-center justify-between">

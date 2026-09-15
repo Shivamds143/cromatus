@@ -1,26 +1,43 @@
 import type { Metadata } from "next";
 import PageHero from "@/components/PageHero";
 import Container from "@/components/Container";
+import { getPageContent } from "@/lib/cms";
+import { legal } from "@/data/content/misc";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = { title: "Terms & Conditions — Chromatus Consulting" };
 
-export default function TermsPage() {
+export default async function TermsPage() {
+  const content = await getPageContent("legal_terms", legal.terms);
+  const title = content?.title || "Terms & Conditions";
+  const updated = content?.updated || "Last updated: September 2026";
+  const customBody = content?.body && Array.isArray(content.body) ? content.body : null;
+
   return (
     <>
       <PageHero
         eyebrow="Legal"
-        title="Terms & Conditions"
+        title={title}
         body="The terms that govern use of this site and engagement with Chromatus Consulting."
       />
       <section className="py-24">
         <Container className="max-w-2xl space-y-10 text-sm leading-relaxed text-slate">
           <p className="rounded-lg border border-line bg-paper-dim px-5 py-4 text-xs text-slate">
-            Draft terms — for review by qualified counsel before publishing.
-            Last updated: September 2026.
+            {updated}
           </p>
 
-          <div className="space-y-3">
-            <h2 className="font-display text-lg font-semibold text-ink">1. Acceptance of Terms</h2>
+          {customBody && customBody.length > 0 ? (
+            <div className="space-y-6">
+              {customBody.map((paragraph: string, idx: number) => (
+                <p key={idx}>{paragraph}</p>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div className="space-y-3">
+                <h2 className="font-display text-lg font-semibold text-ink">1. Acceptance of Terms</h2>
             <p>
               By accessing or using this website, you agree to be bound by
               these Terms &amp; Conditions. If you do not agree, please do
@@ -111,6 +128,8 @@ export default function TermsPage() {
               </a>.
             </p>
           </div>
+          </>
+          )}
         </Container>
       </section>
     </>

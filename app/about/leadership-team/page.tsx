@@ -6,6 +6,11 @@ import CTABanner from "@/components/CTABanner";
 import Reveal from "@/components/Reveal";
 import Icon from "@/components/Icon";
 import { aboutSection } from "@/lib/content";
+import { getPageContent } from "@/lib/cms";
+import { leadershipTeam as fallbackLeadership } from "@/data/content/about";
+
+export const dynamic = "force-dynamic";
+export const revalidate = 0;
 
 export const metadata: Metadata = {
   title: "Leadership Team — Chromatus Consulting",
@@ -113,21 +118,37 @@ function initials(name: string) {
     .toUpperCase();
 }
 
-export default function LeadershipTeamPage() {
+export default async function LeadershipTeamPage() {
+  const content = await getPageContent("leadershipTeam", fallbackLeadership);
   const otherItems = aboutSection.items.filter((i) => i.slug !== "leadership-team");
+
+  const displayTeam =
+    content?.members && content.members.length > 0
+      ? content.members.map((m: any) => ({
+          name: m.name,
+          role: m.role,
+          icon: m.icon || "target",
+          bio: m.bio,
+          expertise: Array.isArray(m.expertise)
+            ? m.expertise
+            : typeof m.expertise === "string"
+            ? m.expertise.split(",").map((s: string) => s.trim())
+            : [],
+        }))
+      : team;
 
   return (
     <>
       <PageHero
-        eyebrow="About Us"
-        title="Leadership Team"
-        body="The people leading research design, client engagement, and delivery across Chromatus."
+        eyebrow={content?.eyebrow || "About Us"}
+        title={content?.title || "Leadership Team"}
+        body={content?.lead || "The people leading research design, client engagement, and delivery across Chromatus."}
       />
 
       <section className="py-24">
         <Container>
           <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {team.map((person, i) => {
+            {displayTeam.map((person: any, i: number) => {
               const color = barColors[i % barColors.length];
               return (
                 <Reveal key={person.name} delay={i * 70}>
@@ -158,7 +179,7 @@ export default function LeadershipTeamPage() {
                     </p>
 
                     <div className="mt-5 flex flex-wrap gap-1.5 border-t border-line pt-4">
-                      {person.expertise.map((tag) => (
+                      {person.expertise.map((tag: string) => (
                         <span
                           key={tag}
                           className="mono-tag rounded-full border border-line px-2.5 py-1 text-slate"

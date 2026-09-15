@@ -16,18 +16,32 @@ const pillars = [
   },
 ];
 
-export default function WhyChoose() {
+type WhyChooseProps = {
+  content?: {
+    eyebrow?: string;
+    title?: string;
+    lead?: string;
+    body?: string;
+    pillars?: Array<{ title: string; body: string }>;
+  };
+};
+
+export default function WhyChoose({ content }: WhyChooseProps) {
+  const eyebrow = content?.eyebrow || "04 / Why Chromatus";
+  const title = content?.title || "Built for teams who need the answer to hold up.";
+  const displayPillars = content?.pillars && content.pillars.length > 0 ? content.pillars : pillars;
+
   return (
     <section className="bg-paper-dim py-24">
       <Container>
-        <p className="eyebrow"><span className="text-signal-dark">04 /</span> Why Chromatus</p>
+        <p className="eyebrow"><span className="text-signal-dark">{eyebrow.includes("/") ? eyebrow.split("/")[0] + "/" : "04 /"}</span> {eyebrow.includes("/") ? eyebrow.split("/")[1] : eyebrow}</p>
         <h2 className="mt-3 max-w-lg font-display text-3xl font-semibold tracking-tight sm:text-[2.6rem]">
-          Built for teams who need the answer to hold up.
+          {title}
         </h2>
 
         <div className="mt-14 grid gap-10 sm:grid-cols-3">
-          {pillars.map((p, i) => (
-            <Reveal key={p.title} delay={i * 100}>
+          {displayPillars.map((p, i) => (
+            <Reveal key={p.title || i} delay={i * 100}>
               <div className="border-t-2 border-signal/40 pt-6">
                 <span className="mono-tag text-signal-dark">{String(i + 1).padStart(2, "0")}</span>
                 <h3 className="mt-4 font-display text-lg font-semibold text-ink">{p.title}</h3>
