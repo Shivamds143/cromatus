@@ -27,8 +27,10 @@ export default function Hero({ content }: HeroProps) {
   const subtitle =
     content?.subtitle ||
     "Chromatus Consulting helps businesses understand their markets, their customers, and their competition — so every decision is backed by evidence, not guesswork.";
+  const rawHref = content?.primaryCta?.href;
+  const ctaHref = rawHref && rawHref !== "/chromatus-pro" ? rawHref : "/contact#contact-form";
   const ctaLabel = content?.primaryCta?.label || "Chromatus Pro";
-  const ctaHref = content?.primaryCta?.href || "/contact#contact-form";
+  const eyebrow = content?.eyebrow || "Research. Perspective. Practical Insight.";
   const tagline = content?.caption?.tagline || "Trusted by teams who are ready to move forward.";
 
   return (
@@ -60,7 +62,10 @@ export default function Hero({ content }: HeroProps) {
       </svg>
 
       <Container className="relative pb-16 pt-20 lg:pt-28">
-        <h1 className="mt-6 max-w-3xl animate-fade-up font-display text-[2.6rem] font-semibold leading-[1.08] tracking-tight sm:text-6xl">
+        <p className="eyebrow text-signal animate-fade-up">
+          <span className="text-signal">01 /</span> {eyebrow.includes("/") ? eyebrow.split("/").pop()?.trim() : eyebrow}
+        </p>
+        <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-[2.6rem] font-semibold leading-[1.08] tracking-tight sm:text-6xl">
           {highlight && title.includes(highlight) ? (
             <>
               {title.split(highlight)[0]}

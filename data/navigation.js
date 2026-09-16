@@ -83,7 +83,7 @@ export const primaryNav = [
 // Renamed per brief: "Let's Talk" -> "CHROMATUS PRO"
 export const chromatusPro = {
   label: 'CHROMATUS PRO',
-  href: '/chromatus-pro',
+  href: '/contact#contact-form',
   description: "Schedule a consultation and let's solve something extraordinary together."
 };
 

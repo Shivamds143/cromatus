@@ -164,11 +164,11 @@ export default function CareerWorkflow({ roles = [] }: Props) {
               {/* Left Column: Why Work With Us */}
               <div className="space-y-6">
                 <div>
-                  <p className="mono-tag text-indigo">Join Our Talent Network</p>
+                  <p className="text-xs font-bold uppercase tracking-wider text-indigo">Join Our Talent Network</p>
                   <h2 className="mt-2 font-display text-3xl font-bold tracking-tight text-ink sm:text-4xl">
                     Ready to ask better questions?
                   </h2>
-                  <p className="mt-4 text-base leading-relaxed text-slate">
+                  <p className="mt-4 text-base font-medium leading-relaxed text-slate-700">
                     Whether you are an experienced researcher or a fresh graduate with an analytical mindset, we want to hear from you. 
                     Share your CV with us and let us know what drives your curiosity.
                   </p>
@@ -182,8 +182,8 @@ export default function CareerWorkflow({ roles = [] }: Props) {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-ink">Direct Review by Team Leads</h3>
-                      <p className="mt-0.5 text-xs text-slate">Every resume is evaluated directly by our practice leaders, not automated filters.</p>
+                      <h3 className="text-sm font-bold text-ink">Direct Review by Team Leads</h3>
+                      <p className="mt-0.5 text-xs font-medium text-slate-600">Every resume is evaluated directly by our practice leaders, not automated filters.</p>
                     </div>
                   </div>
 
@@ -195,8 +195,8 @@ export default function CareerWorkflow({ roles = [] }: Props) {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-ink">Accepted Formats</h3>
-                      <p className="mt-0.5 text-xs text-slate">We accept PDF (.pdf) and Microsoft Word (.doc, .docx) formats up to 10MB.</p>
+                      <h3 className="text-sm font-bold text-ink">Accepted Formats</h3>
+                      <p className="mt-0.5 text-xs font-medium text-slate-600">We accept PDF (.pdf) and Microsoft Word (.doc, .docx) formats up to 10MB.</p>
                     </div>
                   </div>
 
@@ -208,15 +208,15 @@ export default function CareerWorkflow({ roles = [] }: Props) {
                       </svg>
                     </div>
                     <div>
-                      <h3 className="text-sm font-semibold text-ink">Prompt Communication</h3>
-                      <p className="mt-0.5 text-xs text-slate">Candidates shortlisted for discussions are usually notified within 3-5 business days.</p>
+                      <h3 className="text-sm font-bold text-ink">Prompt Communication</h3>
+                      <p className="mt-0.5 text-xs font-medium text-slate-600">Candidates shortlisted for discussions are usually notified within 3-5 business days.</p>
                     </div>
                   </div>
                 </div>
 
-                <div className="rounded-xl border border-line bg-paper p-5 text-xs text-slate">
+                <div className="rounded-xl border border-slate-200 bg-paper p-5 text-xs font-medium text-slate-700">
                   Questions regarding recruitment or hiring processes? You can reach our HR team at{" "}
-                  <a href="mailto:info@chromatus.com" className="font-semibold text-indigo underline">
+                  <a href="mailto:info@chromatus.com" className="font-bold text-indigo underline">
                     info@chromatus.com
                   </a>
                   .

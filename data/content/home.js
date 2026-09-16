@@ -5,7 +5,7 @@ export const home = {
     highlight: 'decisions.',
     subtitle:
       'Chromatus Consulting helps businesses understand their markets, their customers, and their competition \u2014 so every decision is backed by evidence, not guesswork.',
-    primaryCta: { label: 'Start a conversation', href: '/chromatus-pro' },
+    primaryCta: { label: 'Chromatus Pro', href: '/contact#contact-form' },
     secondaryCta: { label: 'Explore what we do', href: '/services' },
     caption: {
       title: 'Research & Consulting',
@@ -13,7 +13,7 @@ export const home = {
     }
   },
   about: {
-    eyebrow: '01 / ABOUT US',
+    eyebrow: '04 / ABOUT US',
     title: 'We turn data into decisions.',
     lead:
       'Chromatus Consulting is a research and consulting firm that helps organizations make better business decisions through data \u2014 understanding their markets, benchmarking their competition, and validating their strategies before they commit resources to them.',
@@ -98,6 +98,6 @@ export const home = {
   },
   chromatusPro: {
     title: "Schedule a consultation and let's solve something extraordinary together.",
-    cta: { label: 'CHROMATUS PRO', href: '/chromatus-pro' }
+    cta: { label: 'CHROMATUS PRO', href: '/contact#contact-form' }
   }
 };

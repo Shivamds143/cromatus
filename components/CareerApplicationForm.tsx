@@ -230,16 +230,16 @@ export default function CareerApplicationForm({
     <div id="apply-form" className={`rounded-2xl border border-line bg-white p-6 sm:p-10 shadow-sm ${className}`}>
       <div className="border-b border-line pb-6">
         <div className="flex flex-wrap items-center justify-between gap-3">
-          <p className="mono-tag text-indigo">Join Our Team</p>
+          <p className="text-xs font-bold uppercase tracking-wider text-indigo">Join Our Team</p>
           {selectedPosition && selectedPosition !== "General / Open Application" && (
-            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-semibold text-emerald-700 border border-emerald-200/80">
-              <span className="h-1.5 w-1.5 rounded-full bg-emerald-500 animate-pulse" />
+            <span className="inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-800 border border-emerald-300">
+              <span className="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse" />
               Applying for: {selectedPosition}
               {onResetPosition && (
                 <button
                   type="button"
                   onClick={onResetPosition}
-                  className="ml-1 text-slate hover:text-ink font-normal underline"
+                  className="ml-1 text-slate-700 hover:text-ink font-semibold underline"
                   title="Switch to general application"
                 >
                   (change)
@@ -248,12 +248,12 @@ export default function CareerApplicationForm({
             </span>
           )}
         </div>
-        <h2 className="mt-1 font-display text-2xl font-semibold tracking-tight text-ink sm:text-3xl">
+        <h2 className="mt-1 font-display text-2xl font-bold tracking-tight text-ink sm:text-3xl">
           {selectedPosition && selectedPosition !== "General / Open Application"
             ? `Apply for ${selectedPosition}`
             : "Upload Your Resume / CV"}
         </h2>
-        <p className="mt-2 text-sm text-slate">
+        <p className="mt-2 text-sm font-medium text-slate-700">
           Submit your profile for current openings or general consideration. We review all applications directly.
         </p>
       </div>
@@ -272,7 +272,7 @@ export default function CareerApplicationForm({
         <div className="grid gap-5 sm:grid-cols-2">
           {/* Full Name */}
           <label className="block">
-            <span className="mono-tag text-slate">
+            <span className="block text-sm font-bold text-ink mb-1.5">
               Full Name <span className="text-red-500">*</span>
             </span>
             <input
@@ -281,16 +281,16 @@ export default function CareerApplicationForm({
               required
               placeholder="e.g. John Doe"
               aria-invalid={Boolean(errors.fullName)}
-              className={`mt-2 w-full rounded-lg border bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo ${
-                errors.fullName ? "border-red-400" : "border-line"
+              className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm font-semibold text-ink placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo ${
+                errors.fullName ? "border-red-400" : "border-slate-300"
               }`}
             />
-            {errors.fullName && <p className="mt-1 text-xs text-red-600">{errors.fullName}</p>}
+            {errors.fullName && <p className="mt-1 text-xs font-semibold text-red-600">{errors.fullName}</p>}
           </label>
 
           {/* Email Address */}
           <label className="block">
-            <span className="mono-tag text-slate">
+            <span className="block text-sm font-bold text-ink mb-1.5">
               Email Address <span className="text-red-500">*</span>
             </span>
             <input
@@ -299,38 +299,38 @@ export default function CareerApplicationForm({
               required
               placeholder="you@domain.com"
               aria-invalid={Boolean(errors.email)}
-              className={`mt-2 w-full rounded-lg border bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo ${
-                errors.email ? "border-red-400" : "border-line"
+              className={`mt-1 w-full rounded-lg border bg-white px-4 py-3 text-sm font-semibold text-ink placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo ${
+                errors.email ? "border-red-400" : "border-slate-300"
               }`}
             />
-            {errors.email && <p className="mt-1 text-xs text-red-600">{errors.email}</p>}
+            {errors.email && <p className="mt-1 text-xs font-semibold text-red-600">{errors.email}</p>}
           </label>
         </div>
 
         <div className="grid gap-5 sm:grid-cols-2">
           {/* Phone Number */}
           <label className="block">
-            <span className="mono-tag text-slate">
-              Phone Number <span className="text-slate/60">(optional)</span>
+            <span className="block text-sm font-bold text-ink mb-1.5">
+              Phone Number <span className="text-xs font-normal text-slate-500">(optional)</span>
             </span>
             <input
               name="phone"
               type="tel"
               placeholder="+91 98765 43210"
-              className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-ink placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo"
             />
           </label>
 
           {/* Experience Level */}
           <label className="block">
-            <span className="mono-tag text-slate">Years of Experience</span>
+            <span className="block text-sm font-bold text-ink mb-1.5">Years of Experience</span>
             <select
               value={experience}
               onChange={(e) => setExperience(e.target.value)}
-              className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-ink outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo cursor-pointer"
             >
               {experienceLevels.map((lvl) => (
-                <option key={lvl} value={lvl}>
+                <option key={lvl} value={lvl} className="font-medium text-ink">
                   {lvl}
                 </option>
               ))}
@@ -341,14 +341,14 @@ export default function CareerApplicationForm({
         <div>
           {/* Role / Position */}
           <label className="block">
-            <span className="mono-tag text-slate">Role of Interest</span>
+            <span className="block text-sm font-bold text-ink mb-1.5">Role of Interest</span>
             <select
               value={selectedPosition}
               onChange={(e) => setSelectedPosition(e.target.value)}
-              className="mt-2 w-full rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-ink outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo cursor-pointer"
             >
               {positionOptions.map((opt) => (
-                <option key={opt} value={opt}>
+                <option key={opt} value={opt} className="font-medium text-ink">
                   {opt}
                 </option>
               ))}
@@ -358,12 +358,12 @@ export default function CareerApplicationForm({
 
         {/* Resume / CV File Upload Box */}
         <div className="block">
-          <div className="flex items-center justify-between">
-            <span className="mono-tag text-slate">
+          <div className="flex items-center justify-between mb-1.5">
+            <span className="block text-sm font-bold text-ink">
               Upload Resume / CV (PDF or DOCX, max 10MB) <span className="text-red-500">*</span>
             </span>
             {selectedFile && (
-              <span className="text-xs font-medium text-emerald-600">File Selected</span>
+              <span className="text-xs font-bold text-emerald-700">File Selected</span>
             )}
           </div>
 
@@ -382,39 +382,39 @@ export default function CareerApplicationForm({
               onDragOver={handleDragOver}
               onDragLeave={handleDragLeave}
               onDrop={handleDrop}
-              className={`mt-2 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition ${
+              className={`mt-1 flex cursor-pointer flex-col items-center justify-center rounded-xl border-2 border-dashed p-8 text-center transition ${
                 isDragging
                   ? "border-indigo bg-indigo-50/50"
                   : errors.file
                   ? "border-red-400 bg-red-50/20"
-                  : "border-line bg-paper-dim/60 hover:border-indigo hover:bg-paper-dim"
+                  : "border-slate-300 bg-slate-50/60 hover:border-indigo hover:bg-slate-50"
               }`}
             >
-              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-xs text-indigo">
-                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white shadow-sm text-indigo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
                   <polyline points="17 8 12 3 7 8" />
                   <line x1="12" y1="3" x2="12" y2="15" />
                 </svg>
               </div>
-              <p className="mt-3 text-sm font-semibold text-ink">
+              <p className="mt-3 text-base font-bold text-ink">
                 Click to browse or drag and drop your resume here
               </p>
-              <p className="mt-1 text-xs text-slate">
+              <p className="mt-1 text-xs font-medium text-slate-600">
                 Supported formats: PDF (.pdf), Microsoft Word (.doc, .docx) &bull; Maximum 10MB
               </p>
             </div>
           ) : (
-            <div className="mt-2 flex items-center justify-between rounded-xl border border-line bg-paper-dim/80 p-4">
+            <div className="mt-1 flex items-center justify-between rounded-xl border border-slate-300 bg-slate-50 p-4">
               <div className="flex items-center gap-3 overflow-hidden">
-                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-indigo/10 text-indigo font-semibold text-xs">
+                <div className="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-indigo text-white font-bold text-xs shadow-xs">
                   {selectedFile.name.endsWith(".pdf") ? "PDF" : "DOC"}
                 </div>
                 <div className="overflow-hidden">
-                  <p className="truncate text-sm font-medium text-ink">
+                  <p className="truncate text-sm font-bold text-ink">
                     {selectedFile.name}
                   </p>
-                  <p className="text-xs text-slate font-mono">
+                  <p className="text-xs font-semibold text-slate-600 font-mono">
                     {formatFileSize(selectedFile.size)}
                   </p>
                 </div>
@@ -424,14 +424,14 @@ export default function CareerApplicationForm({
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="rounded-md border border-line bg-white px-3 py-1.5 text-xs font-medium text-slate hover:text-ink transition"
+                  className="rounded-md border border-slate-300 bg-white px-3 py-1.5 text-xs font-bold text-ink hover:bg-slate-100 transition shadow-2xs"
                 >
                   Change
                 </button>
                 <button
                   type="button"
                   onClick={removeFile}
-                  className="rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-medium text-red-600 hover:bg-red-100 transition"
+                  className="rounded-md border border-red-200 bg-red-50 px-2.5 py-1.5 text-xs font-bold text-red-700 hover:bg-red-100 transition"
                   title="Remove file"
                 >
                   Remove
@@ -440,22 +440,22 @@ export default function CareerApplicationForm({
             </div>
           )}
 
-          {fileError && <p className="mt-1.5 text-xs text-red-600">{fileError}</p>}
+          {fileError && <p className="mt-1.5 text-xs font-semibold text-red-600">{fileError}</p>}
           {errors.file && !fileError && (
-            <p className="mt-1.5 text-xs text-red-600">{errors.file}</p>
+            <p className="mt-1.5 text-xs font-semibold text-red-600">{errors.file}</p>
           )}
         </div>
 
         {/* Message / Cover Note */}
         <label className="block">
-          <span className="mono-tag text-slate">
-            Cover Note / Summary <span className="text-slate/60">(optional)</span>
+          <span className="block text-sm font-bold text-ink mb-1.5">
+            Cover Note / Summary <span className="text-xs font-normal text-slate-500">(optional)</span>
           </span>
           <textarea
             name="message"
             rows={4}
             placeholder="Tell us a little about yourself, your areas of interest, or relevant projects..."
-            className="mt-2 w-full resize-none rounded-lg border border-line bg-white px-4 py-3 text-sm text-ink outline-none transition focus:border-indigo"
+            className="mt-1 w-full resize-none rounded-lg border border-slate-300 bg-white px-4 py-3 text-sm font-semibold text-ink placeholder:font-normal placeholder:text-slate-400 outline-none transition focus:border-indigo focus:ring-1 focus:ring-indigo"
           />
         </label>
 

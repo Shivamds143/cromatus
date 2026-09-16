@@ -27,7 +27,11 @@ type WhyChooseProps = {
 };
 
 export default function WhyChoose({ content }: WhyChooseProps) {
-  const eyebrow = content?.eyebrow || "04 / Why Chromatus";
+  let rawEyebrow = content?.eyebrow || "04 / About Us";
+  if (rawEyebrow.startsWith("01 /") || rawEyebrow.startsWith("1 /")) {
+    rawEyebrow = rawEyebrow.replace(/^(?:01|1)\s*\/\s*/, "04 / ");
+  }
+  const eyebrow = rawEyebrow;
   const title = content?.title || "Built for teams who need the answer to hold up.";
   const displayPillars = content?.pillars && content.pillars.length > 0 ? content.pillars : pillars;
 
