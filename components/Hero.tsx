@@ -30,7 +30,7 @@ export default function Hero({ content }: HeroProps) {
   const rawHref = content?.primaryCta?.href;
   const ctaHref = rawHref && rawHref !== "/chromatus-pro" ? rawHref : "/contact#contact-form";
   const ctaLabel = content?.primaryCta?.label || "Chromatus Pro";
-  const eyebrow = content?.eyebrow || "Research. Perspective. Practical Insight.";
+  const eyebrow = content?.eyebrow || "";
   const tagline = content?.caption?.tagline || "Trusted by teams who are ready to move forward.";
 
   return (
@@ -63,7 +63,7 @@ export default function Hero({ content }: HeroProps) {
 
       <Container className="relative pb-16 pt-20 lg:pt-28">
         <p className="eyebrow text-signal animate-fade-up">
-          <span className="text-signal">01 /</span> {eyebrow.includes("/") ? eyebrow.split("/").pop()?.trim() : eyebrow}
+          <span className="text-signal"></span> {eyebrow.includes("/") ? eyebrow.split("/").pop()?.trim() : eyebrow}
         </p>
         <h1 className="mt-4 max-w-3xl animate-fade-up font-display text-[2.6rem] font-semibold leading-[1.08] tracking-tight sm:text-6xl">
           {highlight && title.includes(highlight) ? (

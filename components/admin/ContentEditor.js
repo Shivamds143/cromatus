@@ -184,17 +184,17 @@ export default function FieldEditor({ label, fieldKey = '', value, onChange, nes
     return (
       <div>
         <label className="block text-xs font-medium text-inkgray mb-1">{label}</label>
-        <div className="flex items-center gap-3">
+        <div className="flex flex-wrap sm:flex-nowrap items-center gap-2 sm:gap-3">
           {strValue && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img src={strValue} alt="" className="w-14 h-14 object-cover rounded-lg border border-gray-200" />
+            <img src={strValue} alt="" className="w-12 h-12 sm:w-14 sm:h-14 shrink-0 object-cover rounded-lg border border-gray-200 bg-white" />
           )}
           <input
             type="text"
             value={strValue}
             onChange={(e) => onChange(e.target.value)}
-            placeholder="/uploads/… or /images/…"
-            className="flex-1 rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brandblue"
+            placeholder="/uploads/… or https://…"
+            className="flex-1 min-w-[180px] rounded-lg border border-gray-200 px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-brandblue"
           />
           <MediaPickerButton onSelect={(url) => onChange(url)} />
         </div>

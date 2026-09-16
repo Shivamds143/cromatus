@@ -110,18 +110,18 @@ export default function EditPageContentPage() {
         <FieldEditor value={data} onChange={setData} />
       </div>
 
-      <div className="sticky bottom-0 mt-6 bg-bglight/95 backdrop-blur py-4 flex items-center gap-3">
+      <div className="sticky bottom-0 mt-6 -mx-4 sm:mx-0 px-4 sm:px-0 bg-bglight/95 backdrop-blur-md py-4 border-t sm:border-t-0 border-gray-200 flex flex-wrap items-center gap-2.5 sm:gap-3 z-20">
         <button
           onClick={() => handleSave(false)}
           disabled={saving}
-          className="rounded-full border border-navy text-navy px-5 py-2.5 text-sm font-semibold hover:bg-navy/5 transition disabled:opacity-60"
+          className="rounded-full border border-navy text-navy px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold hover:bg-navy/5 transition disabled:opacity-60"
         >
           Save draft
         </button>
         <button
           onClick={() => handleSave(true)}
           disabled={saving}
-          className="rounded-full bg-brandorange px-5 py-2.5 text-sm font-semibold text-white hover:bg-brandorange-dark transition disabled:opacity-60"
+          className="rounded-full bg-brandorange px-4 sm:px-5 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-brandorange-dark transition disabled:opacity-60 shadow-xs"
         >
           {saving ? 'Saving…' : 'Publish'}
         </button>
@@ -130,14 +130,14 @@ export default function EditPageContentPage() {
           <button
             onClick={() => handleSave(false)}
             disabled={saving}
-            className="text-sm font-semibold text-inkgray hover:text-navy"
+            className="text-xs sm:text-sm font-semibold text-inkgray hover:text-navy px-2 py-1"
           >
             Unpublish
           </button>
         )}
         <button
           onClick={handleResetToDefault}
-          className="ml-auto text-sm font-semibold text-inkgray hover:text-red-600"
+          className="w-full sm:w-auto sm:ml-auto text-xs sm:text-sm font-semibold text-inkgray hover:text-red-600 text-left sm:text-right pt-1 sm:pt-0"
         >
           Reset to default
         </button>
