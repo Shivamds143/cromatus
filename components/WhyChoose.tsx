@@ -35,7 +35,10 @@ export default function WhyChoose({ content }: WhyChooseProps) {
     rawEyebrow = rawEyebrow.replace(/about(\s*us)?/i, "WHY CHROMATUS ?");
   }
   const eyebrow = rawEyebrow;
-  const title = content?.title || "Built for teams who need the answer to hold up.";
+  let title = content?.title || "Built for teams who need the answer to hold up.";
+  if (/we turn data into decisions/i.test(title)) {
+    title = "Built for teams who need the answer to hold up.";
+  }
   const displayPillars = content?.pillars && content.pillars.length > 0 ? content.pillars : pillars;
 
   return (
