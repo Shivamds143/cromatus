@@ -13,7 +13,7 @@ export const home = {
     }
   },
   about: {
-    eyebrow: '04 / ABOUT US',
+    eyebrow: '04 / WHY CHROMATUS ?',
     title: 'We turn data into decisions.',
     lead:
       'Chromatus Consulting is a research and consulting firm that helps organizations make better business decisions through data \u2014 understanding their markets, benchmarking their competition, and validating their strategies before they commit resources to them.',
